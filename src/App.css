@@ -1,0 +1,43 @@
+.main-content {
+  padding-top: 80px; /* space below navbar */
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Page titles */
+.page-title {
+  font-size: 3.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+/* Paragraph text */
+.page-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 900px;
+}
+
+/* Navbar horizontal links next to brand */
+.horizontal-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;         /* space between links */
+  margin-left: 20px; /* space from "Student Portal" */
+}
+
+/* Optional hover effect for links */
+.horizontal-nav .nav-link:hover {
+  color: #f0f0f0;
+}
+
+/* Optional: make navbar responsive on small screens */
+@media (max-width: 768px) {
+  .horizontal-nav {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
