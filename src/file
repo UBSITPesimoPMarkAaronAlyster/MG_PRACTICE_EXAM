@@ -1,0 +1,378 @@
+App.tsx
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Navbar from "./Navbar";
+import './App.css';
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+import BookRequest from "./pages/BookRequest";
+import EventFeedback from "./pages/EventFeedback";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <div className="container-fluid main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/bookrequest" element={<BookRequest />} />
+          <Route path="/eventfeedback" element={<EventFeedback />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
+
+App.css
+
+/* Main content spacing below navbar */
+.main-content {
+  padding-top: 80px; /* space below navbar */
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Page titles */
+.page-title {
+  font-size: 3.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+/* Paragraph text */
+.page-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 900px;
+}
+
+/* Navbar horizontal links next to brand */
+.horizontal-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;         /* space between links */
+  margin-left: 20px; /* space from "Student Portal" */
+}
+
+/* Optional hover effect for links */
+.horizontal-nav .nav-link:hover {
+  color: #f0f0f0;
+}
+
+/* Optional: make navbar responsive on small screens */
+@media (max-width: 768px) {
+  .horizontal-nav {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+
+
+main.tsx
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App'; // Removed .tsx extension
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+
+
+
+Navbar.tsx
+
+import { Link } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+
+        <span className="navbar-brand">Student Portal</span>
+
+        <div className="navbar-nav horizontal-nav">
+          <Link className="nav-link" to="/">Home</Link>
+          <Link className="nav-link" to="/about">About</Link>
+          <Link className="nav-link" to="/services">Services</Link>
+          <Link className="nav-link" to="/contact">Contact</Link>
+          <Link className="nav-link" to="/bookrequest">Book Request</Link>
+          <Link className="nav-link" to="/eventfeedback">Event Feedback</Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
+
+
+
+About.tsx
+
+
+
+function About() {
+  return (
+    <div>
+
+      <h1 className="page-title">About</h1>
+
+      <p className="page-text">
+        The Student Portal provides students with easy access to university services.
+        It is designed to simplify navigation and improve access to important information.
+      </p>
+
+    </div>
+  )
+}
+
+export default About
+
+
+Contact.tsx
+
+
+
+function Contact() {
+  return (
+    <div>
+
+      <h1 className="page-title">Contact</h1>
+
+      <p className="page-text">
+        For inquiries or assistance, please contact the university support team.
+      </p>
+
+    </div>
+  )
+}
+
+export default Contact
+
+
+
+Home.tsx
+
+function Home() {
+  return (
+    <div>
+
+      <h1 className="page-title">Welcome to the Student Portal</h1>
+
+      <p className="page-text">
+        This portal allows students to access university information, 
+        submit book requests, and provide feedback on events. 
+        Navigate using the menu above to explore different pages.
+      </p>
+
+    </div>
+  )
+}
+
+export default Home
+
+
+
+Services.tsx
+
+
+
+function Services() {
+  return (
+    <div>
+
+      <h1 className="page-title">Services</h1>
+
+      <p className="page-text">
+        Students can access different services such as requesting books,
+        submitting feedback, and viewing important university information.
+      </p>
+
+    </div>
+  )
+}
+
+export default Services
+
+
+
+BookRequest.tsx
+
+import { useState, type ChangeEvent, type FormEvent } from "react";
+
+interface BookRequestData {
+  studentName: string;
+  studentId: string;
+  bookTitle: string;
+  author: string;
+  reason: string;
+}
+
+function BookRequest() {
+  const [studentName, setStudentName] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [bookTitle, setBookTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [reason, setReason] = useState("");
+  const [submittedRequests, setSubmittedRequests] = useState<BookRequestData[]>([]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!studentName || !studentId || !bookTitle || !author || !reason) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    const newRequest: BookRequestData = {
+      studentName,
+      studentId,
+      bookTitle,
+      author,
+      reason
+    };
+
+    setSubmittedRequests([...submittedRequests, newRequest]);
+    setStudentName("");
+    setStudentId("");
+    setBookTitle("");
+    setAuthor("");
+    setReason("");
+  };
+
+  return (
+    <div>
+      <h1 className="page-title">Book Request</h1>
+      <p className="page-text">Submit a request for books not currently available in the library.</p>
+
+      <form onSubmit={handleSubmit} style={{ maxWidth: "600px" }}>
+        <div className="mb-3">
+          <label className="form-label">Student Name</label>
+          <input type="text" className="form-control" value={studentName} onChange={(e: ChangeEvent<HTMLInputElement>) => setStudentName(e.target.value)} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Student ID</label>
+          <input type="text" className="form-control" value={studentId} onChange={(e: ChangeEvent<HTMLInputElement>) => setStudentId(e.target.value)} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Book Title</label>
+          <input type="text" className="form-control" value={bookTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setBookTitle(e.target.value)} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Author</label>
+          <input type="text" className="form-control" value={author} onChange={(e: ChangeEvent<HTMLInputElement>) => setAuthor(e.target.value)} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Reason</label>
+          <textarea className="form-control" value={reason} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setReason(e.target.value)} rows={3} />
+        </div>
+
+        <button type="submit" className="btn btn-primary">Submit Request</button>
+      </form>
+
+      {submittedRequests.length > 0 && (
+        <div className="mt-4">
+          <h3>Submitted Requests</h3>
+          {submittedRequests.map((req, i) => (
+            <div key={i} className="border p-3 mb-2">
+              <p><strong>Name:</strong> {req.studentName}</p>
+              <p><strong>ID:</strong> {req.studentId}</p>
+              <p><strong>Book:</strong> {req.bookTitle}</p>
+              <p><strong>Author:</strong> {req.author}</p>
+              <p><strong>Reason:</strong> {req.reason}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default BookRequest;
+
+
+EventFeedback.tsx
+
+import { useRef, type FormEvent } from "react";
+
+function EventFeedback() {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const feedbackRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!nameRef.current || !emailRef.current || !feedbackRef.current) return;
+
+    if (!nameRef.current.value || !emailRef.current.value || !feedbackRef.current.value) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    alert(`Thank you, ${nameRef.current.value}, for your feedback! Check console for details.`);
+    console.log("Event Feedback Submitted:", {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      feedback: feedbackRef.current.value
+    });
+
+    // Clear inputs
+    nameRef.current.value = "";
+    emailRef.current.value = "";
+    feedbackRef.current.value = "";
+  };
+
+  return (
+    <div>
+      <h1 className="page-title">Event Feedback</h1>
+      <p className="page-text">Share your feedback on university events to improve future activities.</p>
+
+      <form onSubmit={handleSubmit} style={{ maxWidth: "600px" }}>
+        <div className="mb-3">
+          <label className="form-label">Name</label>
+          <input type="text" className="form-control" ref={nameRef} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input type="email" className="form-control" ref={emailRef} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Feedback</label>
+          <textarea className="form-control" ref={feedbackRef} rows={4} />
+        </div>
+
+        <button type="submit" className="btn btn-primary">Submit Feedback</button>
+      </form>
+    </div>
+  );
+}
+
+export default EventFeedback;
